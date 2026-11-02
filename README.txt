@@ -1,4 +1,1 @@
-Nihongo Pocket V3 — 7 cours guidés : chiffres, prix, compteurs, kanji de rue, restaurant, achats et dialogues.
-Ouvrir index.html pour essai local. Pour installer la PWA hors ligne, publier le dossier sur HTTPS puis installer depuis Chrome.
-Progression sauvegardée dans le navigateur. Audio via synthèse vocale japonaise installée sur le téléphone.
-Si une ancienne version est déjà installée, recharger la page une fois avec Internet pour recevoir les nouveaux fichiers.
+Nihongo Pocket V4 — Déposez tous les fichiers à la racine du dépôt GitHub. Supprimez app.js si présent (non utilisé). Vérifiez Settings > Pages, puis ouvrez le site avec Internet et testez en mode avion après rechargement.
