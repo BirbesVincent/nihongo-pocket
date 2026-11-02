@@ -1,10 +1,8 @@
-Nihongo Pocket V5 — GitHub Pages
+Nihongo Pocket V6 — Déploiement GitHub Pages
 
-Envoyer TOUS les fichiers de ce dossier à la racine du dépôt nihongo-pocket (sans le dossier lui-même).
-Fichiers obligatoires : index.html, app.js, data.js, sw.js, manifest.webmanifest, icon.svg, icon-192.png, icon-512.png.
-
-Après publication : ouvrir le site avec Internet, rafraîchir, attendre le service worker puis tester en mode avion après fermeture et réouverture.
-
-Progression V4 : les favoris et les cours approfondis sont récupérés depuis le stockage local du même navigateur. Exporter la progression avant toute réinstallation ou suppression des données du site.
-
-Audio : la synthèse vocale hors ligne nécessite une voix japonaise installée sur Android.
+Décompresser et envoyer tous les fichiers à la RACINE du dépôt GitHub.
+Conserver les noms des fichiers et le dossier GitHub Pages /nihongo-pocket/.
+V6 conserve la progression V5 dans localStorage nihongo-pocket-v5 et ajoute nihongo-pocket-v6.
+Exporter la progression depuis Voyage avant toute réinstallation.
+Pour tester hors ligne : ouvrir en ligne, attendre le service worker, couper Wi-Fi/données, fermer puis rouvrir.
+L’audio dépend des voix japonaises disponibles sur l’appareil.
