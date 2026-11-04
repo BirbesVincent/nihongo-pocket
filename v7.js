@@ -1,0 +1,68 @@
+(()=>{'use strict';
+// Extension additive: aucune clé de progression V5/V6 n'est modifiée.
+const el=id=>document.getElementById(id), esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const particles=[
+['は','wa','Thème de la phrase','Le caractère は se lit « wa » quand il sert de particule. Il annonce ce dont on parle.','私はフランス人です。','Watashi wa furansu-jin desu.','Je suis français.','Dans こんにちは, は se lit aussi wa à la fin de la salutation.'],
+['も','mo','Aussi / également','Remplace souvent は, が ou を pour dire « aussi ».','私も行きます。','Watashi mo ikimasu.','Moi aussi, j’y vais.','A : 私は学生です。 B : 私もです。 = Moi aussi.'],
+['か','ka','Question','À la fin d’une phrase polie, transforme une affirmation en question.','これは水ですか？','Kore wa mizu desu ka?','Est-ce de l’eau ?','La particule か peut aussi relier des alternatives, mais commence par la question.'],
+['を','o','Objet de l’action','Écrit を mais généralement prononcé « o ». Indique ce sur quoi porte l’action.','お茶を飲みます。','Ocha o nomimasu.','Je bois du thé.','« Qu’est-ce que je bois ? » → お茶 (thé).'],
+['に','ni','Destination / moment / cible','Marque notamment l’endroit où l’on va, une heure précise ou un destinataire.','東京に行きます。','Tōkyō ni ikimasu.','Je vais à Tokyo.','七時に = à 7 heures.'],
+['で','de','Lieu d’une action / moyen','Indique où une action se passe ou par quel moyen on fait quelque chose.','電車で行きます。','Densha de ikimasu.','J’y vais en train.','駅で食べます = je mange à la gare.'],
+['の','no','Lien entre deux noms','Indique souvent la possession, l’origine ou une caractéristique.','私のかばんです。','Watashi no kaban desu.','C’est mon sac.','日本の電車 = train japonais.'],
+['が','ga','Sujet / élément mis en avant','Identifie souvent le sujet, notamment pour une information nouvelle, ou avec 好き et わかる.','日本語がわかります。','Nihongo ga wakarimasu.','Je comprends le japonais.','は met le thème en contexte ; が peut mettre le sujet en évidence.'],
+['と','to','Et / avec (noms)','Relie des noms ou indique la personne avec qui l’on fait quelque chose.','友達と行きます。','Tomodachi to ikimasu.','J’y vais avec un ami.','水とお茶 = de l’eau et du thé.'],
+['へ','e','Direction','Écrit へ mais se prononce « e » lorsqu’il marque la direction.','駅へ行きます。','Eki e ikimasu.','Je vais vers la gare.','Pour un débutant, へ et に peuvent souvent désigner la destination, avec une nuance.'],
+['ね','ne','Recherche d’accord','Adoucit la phrase et invite à partager un constat.','おいしいですね。','Oishii desu ne.','C’est bon, n’est-ce pas ?','Très courant dans les échanges informels et polis.'],
+['よ','yo','Information / insistance','Souligne une information que l’on communique.','ここですよ。','Koko desu yo.','C’est ici, je te le dis.','Plus affirmatif que ね.'],
+['こ・そ・あ・ど','ko / so / a / do','Ceci, cela, là-bas, lequel ?','Familles de démonstratifs : これ (ceci, près de moi), それ (cela, près de toi), あれ (cela là-bas), どれ (lequel ?).','これは何ですか？','Kore wa nan desu ka?','Qu’est-ce que c’est ?','ここ / そこ / あそこ / どこ = ici / là / là-bas / où ?'],
+['個','ko','Compteur d’objets','個 (ko) est un compteur pour de nombreux petits objets. Il n’est PAS la particule こ de これ.','りんごを三個ください。','Ringo o sanko kudasai.','Trois pommes, s’il vous plaît.','一個 ikko, 二個 niko, 三個 sanko, 六個 rokko, 八個 hakko, 十個 jukko.'],
+['つ','tsu','Compteur général','Pour compter des objets sans connaître le compteur spécifique, on utilise souvent 一つ, 二つ, 三つ…','二つください。','Futatsu kudasai.','Deux, s’il vous plaît.','一つ hitotsu, 二つ futatsu, 三つ mittsu, 四つ yottsu, 五つ itsutsu.'],
+['人','nin','Compteur de personnes','人 sert à compter les personnes, avec des formes particulières pour une et deux.','五人です。','Go-nin desu.','Nous sommes cinq.','一人 hitori, 二人 futari, 三人 san-nin, 四人 yo-nin, 五人 go-nin.'],
+['です','desu','Phrase polie','Terminaison polie de nombreuses phrases nominales et adjectivales. Ce n’est pas une particule.','これは千円です。','Kore wa sen en desu.','Ceci coûte 1 000 yens.','À l’oral, le « u » final est souvent très discret.'],
+['ます','masu','Verbe poli','Terminaison polie du verbe ; on la reconnaît dans de nombreuses phrases du quotidien.','食べます。','Tabemasu.','Je mange / je mangerai.','食べません = je ne mange pas ; 食べました = j’ai mangé.'],
+['ください','kudasai','Demander poliment','Utilisé après un nom avec を ou après certaines formes verbales pour demander.','これをください。','Kore o kudasai.','Ceci, s’il vous plaît.','Pratique pour commander en montrant un article.'],
+['お願いします','onegaishimasu','S’il vous plaît / je vous prie','Formule très polyvalente pour une demande ou un service.','お会計をお願いします。','Okaikei o onegaishimasu.','L’addition, s’il vous plaît.','On l’entend aussi lors des présentations.']
+];
+const nums=[['零 / 〇','rei / zero','0'],['一','ichi','1'],['二','ni','2'],['三','san','3'],['四','yon / shi','4'],['五','go','5'],['六','roku','6'],['七','nana / shichi','7'],['八','hachi','8'],['九','kyū / ku','9'],['十','jū','10']];
+const numberSections=[
+['De 0 à 10', 'Les dix caractères de base. Le 4 se dit souvent yon, le 7 nana, le 9 kyū. Les lectures varient selon les compteurs.',nums],
+['Construire de 11 à 99','11 = 十一 (jū-ichi) ; 20 = 二十 (ni-jū) ; 24 = 二十四 (ni-jū-yon) ; 99 = 九十九 (kyū-jū-kyū).',[['十一','jū-ichi','11'],['二十','ni-jū','20'],['三十五','san-jū-go','35'],['九十九','kyū-jū-kyū','99']]],
+['Centaines et milliers','百 (hyaku), 千 (sen), 万 (man = 10 000). Attention aux changements de son.',[['百','hyaku','100'],['三百','sanbyaku','300'],['六百','roppyaku','600'],['八百','happyaku','800'],['千','sen','1 000'],['三千','sanzen','3 000'],['八千','hassen','8 000'],['一万','ichi-man','10 000']]],
+['Prix et argent','円 (en) = yen. On dit le nombre puis en. Exemple : 2 500 ¥ = 二千五百円 (ni-sen go-hyaku en).',[['百円','hyaku en','100 ¥'],['五百円','go-hyaku en','500 ¥'],['千二百円','sen ni-hyaku en','1 200 ¥'],['三千五百円','san-zen go-hyaku en','3 500 ¥'],['一万円','ichi-man en','10 000 ¥']]],
+['Compter les objets','Le japonais utilise des compteurs. Les objets généraux se comptent souvent avec ～つ ; les petits objets avec ～個 (ko).',[['一つ','hitotsu','1 objet'],['二つ','futatsu','2 objets'],['三つ','mittsu','3 objets'],['一個','ikko','1 petit objet'],['二個','niko','2 petits objets'],['三個','sanko','3 petits objets'],['六個','rokko','6 petits objets'],['八個','hakko','8 petits objets'],['十個','jukko','10 petits objets']]],
+['Compter les personnes','Les formes pour une et deux personnes sont irrégulières.',[['一人','hitori','1 personne'],['二人','futari','2 personnes'],['三人','san-nin','3 personnes'],['四人','yo-nin','4 personnes'],['五人','go-nin','5 personnes'],['何人','nan-nin','combien de personnes ?']]],
+['Heures et minutes','Pour l’heure : ～時 (ji). Attention à 4 h = yoji, 7 h = shichiji, 9 h = kuji. Les minutes utilisent ～分 (fun / pun).',[['一時','ichiji','1 h'],['四時','yoji','4 h'],['七時','shichiji','7 h'],['九時','kuji','9 h'],['一分','ippun','1 minute'],['三分','sanpun','3 minutes'],['五分','gofun','5 minutes'],['十分','juppun','10 minutes']]],
+['Jours et dates','Les jours du mois ont des formes particulières : 一日 tsuitachi (le 1er), 二日 futsuka (le 2), 三日 mikka (le 3).',[['今日','kyō','aujourd’hui'],['明日','ashita','demain'],['昨日','kinō','hier'],['一日','tsuitachi','1er du mois'],['二日','futsuka','2 du mois'],['三日','mikka','3 du mois'],['何日','nan-nichi','quel jour du mois ?']]]
+];
+let activeParticle=0,particleQuestion=0,practiceQuestion=0;
+const particleQs=[
+['Dans « 私も行きます », que signifie も ?',['aussi','question','possession'],0,'も = aussi, également.'],
+['Dans « これは水ですか », à quoi sert か ?',['compter','poser une question','dire aussi'],1,'か marque ici la question.'],
+['Comment se prononce は lorsqu’il marque le thème ?',['ha','wa','ka'],1,'は se prononce wa comme particule de thème.'],
+['Quel caractère indique souvent le lieu où se déroule une action ?',['で','の','も'],0,'駅で = à la gare (lieu d’action).'],
+['Quel petit mot marque souvent l’objet direct ?',['に','を','ね'],1,'を se prononce o.'],
+['Dans « 私のかばん », の exprime…',['une question','un lien/possession','un nombre'],1,'の relie les noms.'],
+['Dans « 三個 », 個 (ko) sert à…',['compter des objets','poser une question','indiquer un lieu'],0,'個 est un compteur, pas une particule.'],
+['Comment dit-on deux personnes ?',['二つ futatsu','二人 futari','二個 niko'],1,'二人 se prononce futari.'],
+['Quel groupe signifie « lequel ? » ?',['どれ','これ','それ'],0,'どれ = lequel ; これ = ceci ; それ = cela.'],
+['Quelle particule indique souvent une destination ?',['に','ね','も'],0,'東京に行きます = je vais à Tokyo.'],
+['Quel petit mot peut inviter à partager un constat ?',['よ','ね','を'],1,'ね : n’est-ce pas ? / hein ?'],
+['Dans « 電車で行きます », で exprime…',['le moyen de transport','la possession','une question'],0,'電車で = en train.']
+];
+const exercises={
+reading:[['二十四','24','42','14','204'],['九十九','99','90','19','909'],['三百','300','30','3 000','800'],['六百','600','60','6 000','800'],['八百','800','80','8 000','300'],['三千','3 000','300','30 000','8 000'],['八千','8 000','800','80 000','3 000'],['一万','10 000','1 000','100 000','100']],
+building:[['Comment écrit-on 35 ?','三十五','五十三','三百五','三十'],['Comment écrit-on 1 200 ?','千二百','百二十','一万二千','二千百'],['Comment écrit-on 500 ?','五百','五千','五十','五'],['Comment écrit-on 10 000 ?','一万','一千','十万','百'],['Comment écrit-on 24 ?','二十四','四十二','二百四','十四']],
+counters:[['Deux personnes','二人','二個','二つ','二時'],['Trois petits objets','三個','三人','三時','三千'],['Un objet (compteur général)','一つ','一人','一時','一万'],['Quatre personnes','四人','四個','四時','四つ'],['Six petits objets','六個','六人','六時','六千'],['Cinq personnes','五人','五個','五つ','五時']],
+time:[['Quelle heure indique 四時 ?','4 h','7 h','9 h','14 h'],['Comment lit-on 9 h ?','kuji','kyūji','yoji','shichiji'],['Quelle heure indique 七時 ?','7 h','4 h','9 h','1 h'],['Comment dit-on 1 minute ?','ippun','ichifun','sanpun','gofun'],['Comment dit-on 10 minutes ?','juppun','jūfun','jūji','juu-en'],['Quelle heure indique 九時 ?','9 h','7 h','4 h','6 h']],
+prices:[['三千五百円','3 500 ¥','350 ¥','5 300 ¥','35 000 ¥'],['千二百円','1 200 ¥','120 ¥','2 100 ¥','12 000 ¥'],['五百円','500 ¥','5 000 ¥','50 ¥','150 ¥'],['一万円','10 000 ¥','1 000 ¥','100 000 ¥','100 ¥'],['二千五百円','2 500 ¥','250 ¥','5 200 ¥','25 000 ¥']]
+};
+const storeKey='nihongo-pocket-v7-nombres';let score={answered:0,correct:0,...(()=>{try{return JSON.parse(localStorage.getItem(storeKey))||{}}catch{return {}}})()};
+function persist(){try{localStorage.setItem(storeKey,JSON.stringify(score))}catch{}}
+function renderGuide(){el('numberGuide').innerHTML=numberSections.map((s,i)=>`<details ${i===0?'open':''}><summary style="padding:12px;font-weight:700;cursor:pointer">${i+1}. ${esc(s[0])}</summary><p>${esc(s[1])}</p><div style="overflow-x:auto"><table class="npv7-table"><thead><tr><th>Japonais</th><th>Lecture</th><th>Sens</th></tr></thead><tbody>${s[2].map(t=>`<tr><td lang="ja">${esc(t[0])}</td><td>${esc(t[1])}</td><td>${esc(t[2])}</td></tr>`).join('')}</tbody></table></div></details>`).join('')+`<div class="npv7-note"><strong>Astuce :</strong> こ (ko) est une syllabe ; 個 (ko) est un compteur. は se prononce « wa » comme particule, mais « ha » dans beaucoup de mots. も (mo) signifie « aussi » comme particule.</div>`}
+function renderParticles(){el('particleList').innerHTML=particles.map((p,i)=>`<button class="npv7-chip ${activeParticle===i?'active':''}" data-particle="${i}"><strong lang="ja">${esc(p[0])}</strong> · ${esc(p[1])}</button>`).join('');el('particleList').querySelectorAll('button').forEach(b=>b.onclick=()=>{activeParticle=Number(b.dataset.particle);renderParticles()});const p=particles[activeParticle];el('particleDetail').innerHTML=`<h2><span lang="ja">${esc(p[0])}</span> · ${esc(p[1])}</h2><p><strong>${esc(p[2])}</strong></p><p>${esc(p[3])}</p><div class="npv7-example"><div class="jp" lang="ja">${esc(p[4])}</div><p>${esc(p[5])}</p><strong>${esc(p[6])}</strong></div><div class="npv7-note">${esc(p[7])}</div><button id="particleSpeak">🔊 Écouter la phrase</button>`;el('particleSpeak').onclick=()=>{if(typeof speak==='function')speak(p[4])}}
+function quiz(root,question,answers,correct,explain,next){root.innerHTML=`<p><strong>${esc(question)}</strong></p><div class="npv7-options">${answers.map((a,i)=>`<button class="npv7-choice" data-answer="${i}">${esc(a)}</button>`).join('')}</div><div class="npv7-result" aria-live="polite"></div>`;root.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.answer)===correct;score.answered++;if(ok)score.correct++;persist();root.querySelectorAll('[data-answer]').forEach(x=>{x.disabled=true;if(Number(x.dataset.answer)===correct)x.classList.add('npv7-good');else if(x===b)x.classList.add('npv7-bad')});const r=root.querySelector('.npv7-result');r.innerHTML=`<p class="npv7-feedback">${ok?'✓ Bonne réponse !':'✗ Pas encore.'} ${esc(explain)}</p><button class="primary" id="npv7-next">Question suivante →</button><p class="muted">${score.correct}/${score.answered} bonnes réponses dans ces nouveaux exercices</p>`;r.querySelector('button').onclick=next})}
+function nextParticle(){const q=particleQs[particleQuestion%particleQs.length];quiz(el('particleQuiz'),q[0],q[1],q[2],q[3],()=>{particleQuestion++;nextParticle()})}
+function nextPractice(){const mode=el('numberPracticeMode').value,items=exercises[mode],q=items[practiceQuestion%items.length];let answers=q.slice(1),correctAnswer=answers[0];answers=answers.map((x,i)=>({x,order:(i+practiceQuestion*7)%answers.length})).sort((a,b)=>a.order-b.order).map(x=>x.x);quiz(el('numberPractice'),q[0],answers,answers.indexOf(correctAnswer),`Réponse : ${correctAnswer}.`,()=>{practiceQuestion++;nextPractice()})}
+function init(){if(!el('numberGuide')||!el('particleList'))return;renderGuide();renderParticles();nextParticle();nextPractice();el('numberPracticeMode').onchange=()=>{practiceQuestion=0;nextPractice()};}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
