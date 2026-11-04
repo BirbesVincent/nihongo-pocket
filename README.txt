@@ -1,10 +1,13 @@
-Nihongo Pocket V7 — Extension nombres et mots-clés
+Nihongo Pocket V8 — Déploiement GitHub Pages
 
-Mise à jour depuis V6 : conserver tous les fichiers à la racine du dépôt GitHub Pages et ajouter v7.js.
-Le service worker est mis à jour pour le nouveau cache et inclut v7.js.
+1. Décompresser le ZIP.
+2. Envoyer tous les fichiers à la racine du dépôt GitHub (Add file > Upload files).
+3. Attendre la publication GitHub Pages.
+4. Ouvrir le site en ligne et attendre le renouvellement du cache.
+5. Tester la navigation, les verbes, les phrases, les missions et le coach.
+6. Fermer le navigateur, activer le mode avion et rouvrir l’application.
 
-Ajouts : guide des nombres (0 à 10 000, yens, heures, dates, personnes, compteurs), 5 séries d'exercices, 20 mots-clés japonais et 12 questions de compréhension.
-Les données de progression V5 et V6 restent dans les mêmes clés localStorage. V7 utilise une clé séparée pour ses nouveaux quiz.
-
-Après déploiement : recharger la page en ligne, attendre l'activation du nouveau service worker, puis tester en mode avion après fermeture complète.
-La synthèse vocale hors ligne dépend des voix installées sur Android.
+Avant la mise à jour, exporter une sauvegarde depuis Voyage.
+En V8, l’export complet est disponible dans Progrès > Coach et Voyage.
+Les données sont stockées dans localStorage, sans compte ni serveur.
+La synthèse vocale japonaise dépend des voix locales de l’appareil.
